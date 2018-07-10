@@ -191,9 +191,9 @@ contract MultiSig {
     // Initializing all contract variables
     mapping(address => uint) private contributions;
     mapping(address => bool) private contributors;
-    mapping(address => uint) private getProposalValue;
+    mapping(address => uint) public getProposalValue;
     mapping(address => bool) private submitters;
-    mapping(address => bool) private signersList;
+    mapping(address => bool) public signersList;
     mapping(address => bool) private withdrawals;
     mapping(address => SubmittedProposal) private proposals;
 

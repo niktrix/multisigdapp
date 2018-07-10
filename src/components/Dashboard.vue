@@ -1,7 +1,7 @@
 <template>
 
   <div class="dashboard">
-    <h1>{{ msg }} Owner:  {{this.contractaddress}}</h1>
+    <h1>{{ msg }} Balance:  {{this.contractbalance}}</h1>
     <div v-if="isaccepting">
       This Contract is  {{ pseudo }}.
     </div>
@@ -55,6 +55,16 @@
 
 
  </div>
+
+  <h1>Events</h1>
+
+ <div v-for="item in events" >
+       <div>{{item.event}} </div>
+      <div>{{item.args}} </div>
+
+
+  <!-- content -->
+</div>
    </div>
 
 </template>
@@ -77,9 +87,11 @@ export default {
       signers: [],
       rejectaddress: '',
       acceptaddress: '',
+      contractbalance: '',
       contributors: [],
       contractaddress: 'address',
       proposals: [],
+      events: [],
 
       pseudo: undefined
     }
@@ -106,11 +118,12 @@ export default {
         // MultiSig.getAllSigners().then((signers) => {
         //   this.signers = signers
         // })
-        MultiSig.listenevents()
+        MultiSig.listenevents(this.event)
         this.getContributors()
         this.getContractAddress()
         this.getContributorAmount()
         this.getProposals()
+        this.getContractBalance()
       })
     }).catch(err => {
       console.log('error calling MultiSig.isInContributionPeriod', err)
@@ -171,6 +184,14 @@ export default {
       })
     },
 
+    getContractBalance: function () {
+      console.log('getContractBalance')
+      MultiSig.getContractBalance().then((cont) => {
+        this.contractbalance = cont
+        console.log('getContractBalance')
+      })
+    },
+
     getProposals: function () {
       console.log('getProposals')
       MultiSig.listOpenProposals().then((cont) => {
@@ -193,6 +214,11 @@ export default {
     accept: function () {
       console.log('approve', this.acceptaddress)
       MultiSig.approve(this.acceptaddress)
+    },
+
+    event: function (err, ev) {
+      console.log(err, ev)
+      this.events.unshift(ev)
     },
 
     reject: function () {

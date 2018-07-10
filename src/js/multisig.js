@@ -108,6 +108,18 @@ const MultiSig = {
     })
   },
 
+  getContractBalance: function (address) {
+    let self = this
+
+    return new Promise((resolve, reject) => {
+      self.instance.getContractBalance.call().then(balance => {
+        resolve(balance)
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+
   contributersBalance: function (address) {
     let self = this
 
@@ -144,16 +156,12 @@ const MultiSig = {
     })
   },
 
-  listenevents: function () {
+  listenevents: function (callme) {
     let self = this
 
     var events = self.instance.allEvents({fromBlock: 0, toBlock: 'latest'})
     events.watch(function (err, ev) {
-      if (err) {
-        console.log(err)
-      } else {
-        console.log(ev)
-      }
+      callme(err, ev)
     })
   },
 

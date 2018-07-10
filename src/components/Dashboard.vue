@@ -6,32 +6,30 @@
     <h1>{{ msg }} Balance:  {{this.contractbalance}}</h1>
 
      <h1>Contributors</h1>
-
-<div v-for="item in contributors" >
-       <div>{{item}}   </div>
-
-  <!-- content -->
-</div>
+       <div v-for="item in contributors" >
+           <div>{{item}}   </div>
+       </div>
 
     <div v-if="isaccepting">
+
+      Contract is accepting contributions
 
       <input v-model="amount" placeholder="Wei">
       <button  v-on:click="contribute" >Contribute</button>
     </div>
 
       <!-- <div v-if="!accepting"> -->
-              <div>
+      <div v-if="!isaccepting">
+              Contract is not  accepting contributions
 
-
-         <h1>Proposals</h1>
+          <h1>Proposals</h1>
           {{this.proposals}}
           <br>
 
-      <input v-model="proposalamount" placeholder="Wei">
-      <button  v-on:click="propose()" >Propose</button>
+          <input v-model="proposalamount" placeholder="Wei">
+          <button  v-on:click="propose()" >Propose</button>
 
-
-    </div>
+      </div>
 
  <div  v-if="isSigner">
 
@@ -82,7 +80,7 @@ export default {
   data () {
     return {
       msg: 'Multisig Contract',
-      accepting: false,
+      accepting: '',
       isSigner: false,
       amount: 0,
       proposalamount: 0,
@@ -100,7 +98,7 @@ export default {
   },
   computed: {
     isaccepting: function () {
-      return (this.accepting === 0)
+      return (this.accepting === '0')
     }
   },
   beforeCreate: function () {
@@ -121,11 +119,9 @@ export default {
         //   this.signers = signers
         // })
         MultiSig.listenevents(this.event)
+        this.reload()
         this.getContributors()
-        this.getContractAddress()
-        this.getContributorAmount()
         this.getProposals()
-        this.getContractBalance()
       })
     }).catch(err => {
       console.log('error calling MultiSig.isInContributionPeriod', err)
@@ -142,6 +138,14 @@ export default {
       //   console.log(err)
       // })
     },
+
+    reload: function () {
+      this.getContractAddress()
+      // this.getContributorAmount()
+      // this.getProposals()
+      this.getContractBalance()
+    },
+
     endcontribution: function () {
       console.log('endcontribution')
       MultiSig.endContributionPeriod().then(() => {
@@ -167,7 +171,7 @@ export default {
     getContributorAmount: function () {
       var _this = this
       console.log('-----', _this.contributors)
-      for (var i = 0; i < _this.contributors.length - 1; i++) {
+      for (var i = 0; i <= _this.contributors.length - 1; i++) {
         console.log('this.cont', this.contributors)
         MultiSig.getContributorAmount(this.contributors[i].address).then((cont) => {
           console.log('cont.Valueof()', cont.Valueof())
@@ -196,9 +200,17 @@ export default {
 
     getProposals: function () {
       console.log('getProposals')
+      var _this = this
       MultiSig.listOpenProposals().then((cont) => {
-        this.proposals = cont
-        console.log('listOpenProposals')
+        // this.proposals = cont
+        console.log('listOpenProposals', cont)
+        for (var i = 0; i <= cont.length - 1; i++) {
+          console.log('this.cont proposals', cont)
+          MultiSig.getProposalstruct(cont).then((p) => {
+            _this.proposals.unshift({address: p[0], amount: p[1], approve: p[2], reject: p[3]})
+            console.log('getProposalstruct', p)
+          })
+        }
       })
     },
 
@@ -221,6 +233,7 @@ export default {
     event: function (err, ev) {
       console.log(err, ev)
       this.events.unshift(ev)
+      //  this.reload()
     },
 
     reject: function () {

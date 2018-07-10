@@ -197,7 +197,7 @@ contract MultiSig {
     mapping(address => bool) private submitters;
     mapping(address => bool) public signersList;
     mapping(address => bool) private withdrawals;
-    mapping(address => SubmittedProposal) private proposals;
+    mapping(address => SubmittedProposal) public proposals;
 
 
     // Address variables
@@ -280,7 +280,7 @@ contract MultiSig {
       require(totalContribution > 0, "Not enough ethers in contract, fund contract before ending contribution period!!!");
 
       state = ProposalState.Active;
-      emit ContributionPeriodEnded()
+      emit ContributionPeriodEnded();
   }
 
    /*

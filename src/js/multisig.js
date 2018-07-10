@@ -144,6 +144,30 @@ const MultiSig = {
     })
   },
 
+  getProposalstruct: function (address) {
+    let self = this
+
+    return new Promise((resolve, reject) => {
+      self.instance.proposals.call(address).then(p => {
+        resolve(p)
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+
+  withdraw: function (amt) {
+    let self = this
+
+    return new Promise((resolve, reject) => {
+      self.instance.withdraw(amt, {from: window.web3.eth.accounts[0]}).then(p => {
+        resolve(p)
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+
   endContributionPeriod: function () {
     let self = this
 
@@ -183,16 +207,10 @@ const MultiSig = {
     self.instance.submitProposal(value, {from: window.web3.eth.accounts[0]})
   },
 
-  withdraw: function (value) {
-    let self = this
-
-    self.instance.withdraw(value, {from: window.web3.eth.accounts[0]})
-  },
-
   reject: function (address) {
     let self = this
 
-    self.instance.approve(address, {from: window.web3.eth.accounts[0]})
+    self.instance.reject(address, {from: window.web3.eth.accounts[0]})
   },
 
   isInContributionPeriod: function () {

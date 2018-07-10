@@ -1,20 +1,19 @@
 <template>
 
+
+
   <div class="dashboard">
     <h1>{{ msg }} Balance:  {{this.contractbalance}}</h1>
-    <div v-if="isaccepting">
-      This Contract is  {{ pseudo }}.
-    </div>
+
      <h1>Contributors</h1>
 
 <div v-for="item in contributors" >
-       <div>{{item}} </div>
+       <div>{{item}}   </div>
 
   <!-- content -->
 </div>
 
-    <div v-if="accepting">
-
+    <div v-if="isaccepting">
 
       <input v-model="amount" placeholder="Wei">
       <button  v-on:click="contribute" >Contribute</button>
@@ -35,11 +34,16 @@
     </div>
 
  <div  v-if="isSigner">
+
+            <h1>Signers</h1>
+
          You are one of the signer
 
     <!-- <div v-if="accepting"> -->
       <div>
             <button  v-on:click="endcontribution()">End Contribution Period</button>
+          <br>
+          <br>
           <br>
 
             <input v-model="acceptaddress" placeholder="address">
@@ -56,15 +60,13 @@
 
  </div>
 
-  <h1>Events</h1>
-
  <div v-for="item in events" >
-       <div>{{item.event}} </div>
-      <div>{{item.args}} </div>
-
+       <div>{{item.event}}  {{item.args}} </div>
 
   <!-- content -->
 </div>
+
+
    </div>
 
 </template>
@@ -98,14 +100,14 @@ export default {
   },
   computed: {
     isaccepting: function () {
-      return (typeof this.pseudo !== 'undefined')
+      return (this.accepting === 0)
     }
   },
   beforeCreate: function () {
     MultiSig.init().then(() => {
       MultiSig.isInContributionPeriod(window.web3.eth.accounts[0]).then((exists) => {
-        this.accepting = exists
-        console.log('accepting', exists)
+        this.accepting = exists.toString(10)
+        console.log('accepting', exists.toString(10))
         if (exists) {
           this.pseudo = 'Accepting Contribution'
         } else {

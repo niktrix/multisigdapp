@@ -173,6 +173,8 @@ contract MultiSig {
     event ProposalApproved(address indexed _approver, address indexed _beneficiary, uint _valueInWei);
     event ProposalRejected(address indexed _approver, address indexed _beneficiary, uint _valueInWei);
     event WithdrawPerformed(address indexed beneficiary, uint _valueInWei);
+    event ContributionPeriodEnded();
+
 
     enum ProposalState {
         AcceptingContributions,
@@ -278,6 +280,7 @@ contract MultiSig {
       require(totalContribution > 0, "Not enough ethers in contract, fund contract before ending contribution period!!!");
 
       state = ProposalState.Active;
+      emit ContributionPeriodEnded()
   }
 
    /*

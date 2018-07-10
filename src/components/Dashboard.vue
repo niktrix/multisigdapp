@@ -1,22 +1,43 @@
 <template>
+  <v-container grid-list-md text-xs-center>
+        <v-layout row wrap>
 
 
-
-  <div class="dashboard">
     <h1>{{ msg }} Balance:  {{this.contractbalance}}</h1>
 
-     <h1>Contributors</h1>
+ <v-flex xs6>
+
+    <h1>Contributors</h1>
        <div v-for="item in contributors" >
            <div>{{item}}   </div>
        </div>
 
-    <div v-if="isaccepting">
+
+          <div v-if="isaccepting" xs6>
 
       Contract is accepting contributions
+      <br>
 
-      <input v-model="amount" placeholder="Wei">
-      <button  v-on:click="contribute" >Contribute</button>
+      <v-text-field xs6 v-model="amount" placeholder="Wei" label="Amount to contribute"></v-text-field>
+      <v-btn xs6 color="yellow" v-on:click="contribute" >Contribute</v-btn>
     </div>
+
+  </v-flex>
+
+
+  <v-flex xs6>
+
+  </v-flex>
+
+
+  <v-form>
+
+  <div class="dashboard">
+
+
+
+
+
 
       <!-- <div v-if="!accepting"> -->
       <div v-if="!isaccepting">
@@ -26,49 +47,52 @@
           {{this.proposals}}
           <br>
 
-          <input v-model="proposalamount" placeholder="Wei">
-          <button  v-on:click="propose()" >Propose</button>
+          <v-text-field v-model="proposalamount" placeholder="Wei" label="Proposal amount"></v-text-field>
+          <v-btn color="orange"  v-on:click="propose()" >Propose</v-btn>
 
       </div>
 
- <div  v-if="isSigner">
-
-            <h1>Signers</h1>
-
+      <div  v-if="isSigner">
+        <h1>Signers</h1>
          You are one of the signer
+         <br>
+            <div v-if="isaccepting">
+                  <v-btn  color="red" v-on:click="endcontribution()">End Contribution Period</v-btn>
+                  <br>
+            </div>
 
-    <!-- <div v-if="accepting"> -->
-      <div v-if="isaccepting">
-            <button  v-on:click="endcontribution()">End Contribution Period</button>
-          <br>
-          <br>
-          <br>
+            <div v-if="!isaccepting">
+                <v-text-field v-model="acceptaddress" placeholder="address" label="Adress to approve"></v-text-field>
+                <v-btn color="blue" v-on:click="accept()" >Approve</v-btn>
+                <br>
+                <v-text-field v-model="rejectaddress" placeholder="address" label="Adress to Reject"></v-text-field>
+                <v-btn color="blue" v-on:click="reject()" >Reject</v-btn>
+          </div>
+
       </div>
-      <div v-if="!isaccepting">
-            <input v-model="acceptaddress" placeholder="address">
-            <button  v-on:click="accept()" >Approve</button>
-          <br>
-      <input v-model="rejectaddress" placeholder="address">
-      <button  v-on:click="reject()" >Reject</button>
-    </div>
 
- </div>
- <div >
-               <h1>Withdraw</h1>
+      <div v-if="!isaccepting" >
+            <h1>Withdraw</h1>
+            <v-text-field v-model="withdrawamount" placeholder="withdraw amount in wei"></v-text-field>
+            <v-btn color="green"  v-on:click="withdraw()" >Withdraw</v-btn>
 
-     <input v-model="withdrawamount" placeholder="withdraw amount in wei">
-      <button  v-on:click="withdraw()" >Withdraw</button>
+      </div>
 
- </div>
 
- <div v-for="item in events" >
-       <div>{{item.event}}  {{item.args}} </div>
+          <h1>Event Logs</h1>
 
-  <!-- content -->
+        <div v-for="item in events" >
+              <div>{{item.event}}  {{item.args}} </div>
+
+          <!-- content -->
+        </div>
+
+
 </div>
+  </v-form>
+      </v-layout>
 
-
-   </div>
+  </v-container>
 
 </template>
 

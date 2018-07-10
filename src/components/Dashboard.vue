@@ -5,13 +5,25 @@
     <div v-if="isaccepting">
       This Contract is  {{ pseudo }}.
     </div>
+     <h1>Contributors</h1>
+      {{this.contributors}}
 
     <div v-if="accepting">
-      <h1>Contributors</h1>
-      {{this.contributors}}
+
 
       <input v-model="amount" placeholder="Wei">
       <button  v-on:click="contribute" >Contribute</button>
+    </div>
+
+      <div v-if="!accepting">
+
+         <h1>Proposals</h1>
+          {{this.proposals}}
+
+      <input v-model="proposalamount" placeholder="Wei">
+      <button  v-on:click="propose()" >Propose</button>
+
+
     </div>
 
  <div v-if="isSigner">
@@ -21,16 +33,7 @@
             <button  v-on:click="endcontribution()">End Contribution Period</button>
     </div>
 
-      <div v-if="!accepting">
 
-         <h1>Proposals</h1>
-          {{this.proposals}}
-
-      <input v-model="proposalamount" placeholder="Wei">
-      <button  v-on:click="propose" >Contribute</button>
-
-
-    </div>
 
 
  </div>
@@ -147,8 +150,7 @@ export default {
       MultiSig.contribute(this.amount)
     },
 
-    propose: function (e) {
-      e.preventDefault()
+    propose: function () {
       console.log('proposeamount', this.proposalamount)
       MultiSig.submitproposal(this.proposalamount)
     }

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "truffle-contract": "^3.0.0",
+    "truffle-hdwallet-provider": "0.0.5",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0",
     "vue-tabs-component": "^1.4.0"

@@ -6,7 +6,12 @@
       This Contract is  {{ pseudo }}.
     </div>
      <h1>Contributors</h1>
-      {{this.contributors}}
+
+<div v-for="item in contributors" >
+       <div>{{item}} </div>
+
+  <!-- content -->
+</div>
 
     <div v-if="accepting">
 
@@ -15,10 +20,13 @@
       <button  v-on:click="contribute" >Contribute</button>
     </div>
 
-      <div v-if="!accepting">
+      <!-- <div v-if="!accepting"> -->
+              <div>
+
 
          <h1>Proposals</h1>
           {{this.proposals}}
+          <br>
 
       <input v-model="proposalamount" placeholder="Wei">
       <button  v-on:click="propose()" >Propose</button>
@@ -26,11 +34,21 @@
 
     </div>
 
- <div v-if="isSigner">
+ <div >
          You are one of the signer
 
-    <div v-if="accepting">
+    <!-- <div v-if="accepting"> -->
+      <div>
             <button  v-on:click="endcontribution()">End Contribution Period</button>
+          <br>
+
+            <input v-model="acceptaddress" placeholder="address">
+      <button  v-on:click="accept()" >Approve</button>
+
+          <br>
+
+      <input v-model="rejectaddress" placeholder="address">
+      <button  v-on:click="reject()" >Reject</button>
     </div>
 
 
@@ -58,6 +76,8 @@ export default {
       amount: 0,
       proposalamount: 0,
       signers: [],
+      rejectaddress: '',
+      acceptaddress: '',
       contributors: [],
       contractaddress: 'address',
       proposals: [],
@@ -74,6 +94,7 @@ export default {
     MultiSig.init().then(() => {
       MultiSig.isInContributionPeriod(window.web3.eth.accounts[0]).then((exists) => {
         this.accepting = exists
+        console.log('accepting', exists)
         if (exists) {
           this.pseudo = 'Accepting Contribution'
         } else {
@@ -89,6 +110,8 @@ export default {
         MultiSig.listenevents()
         this.getContributors()
         this.getContractAddress()
+        this.getContributorAmount()
+        this.getProposals()
       })
     }).catch(err => {
       console.log('error calling MultiSig.isInContributionPeriod', err)
@@ -115,18 +138,22 @@ export default {
     getContributors: function () {
       console.log('endcontribution')
       MultiSig.getContributers().then((cont) => {
-        this.contributors = cont
+        this.contributors.push({'address': cont})
         console.log('ended')
       })
     },
 
-    // getProposals: function () {
-    //   console.log('endcontribution')
-    //   MultiSig.getContributers().then((cont) => {
-    //     this.contributors = cont
-    //     console.log('ended')
-    //   })
-    // },
+    getContributorAmount: function () {
+      for (var i = 0; i < this.contributors.length - 1; i++) {
+        console.log('this.cont', this.contributors)
+        MultiSig.getContributorAmount(this.contributors[i].address).then((cont) => {
+          console.log('cont.Valueof()', cont.Valueof())
+          this.contributors[i].amount = 90
+          console.log('this.cont', this.contributors)
+        })
+      }
+      console.log('getContributorAmount')
+    },
 
     getContractAddress: function () {
       console.log('endcontribution')
@@ -153,6 +180,16 @@ export default {
     propose: function () {
       console.log('proposeamount', this.proposalamount)
       MultiSig.submitproposal(this.proposalamount)
+    },
+
+    accept: function () {
+      console.log('approve', this.acceptaddress)
+      MultiSig.approve(this.acceptaddress)
+    },
+
+    reject: function () {
+      console.log('approve', this.rejectaddress)
+      MultiSig.reject(this.rejectaddress)
     }
 
   }

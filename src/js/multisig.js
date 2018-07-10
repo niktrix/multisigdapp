@@ -191,7 +191,7 @@ const MultiSig = {
     let self = this
 
     return new Promise((resolve, reject) => {
-      self.instance.isAccepting.call(
+      self.instance.state.call(
         // address || window.web3.eth.defaultAccount,
         //{from: window.web3.eth.accounts[0]}
       ).then(exists => {

@@ -38,23 +38,26 @@
          You are one of the signer
 
     <!-- <div v-if="accepting"> -->
-      <div>
+      <div v-if="isaccepting">
             <button  v-on:click="endcontribution()">End Contribution Period</button>
           <br>
           <br>
           <br>
-
+      </div>
+      <div v-if="!isaccepting">
             <input v-model="acceptaddress" placeholder="address">
-      <button  v-on:click="accept()" >Approve</button>
-
+            <button  v-on:click="accept()" >Approve</button>
           <br>
-
       <input v-model="rejectaddress" placeholder="address">
       <button  v-on:click="reject()" >Reject</button>
     </div>
 
+ </div>
+ <div >
+               <h1>Withdraw</h1>
 
-
+     <input v-model="withdrawamount" placeholder="withdraw amount in wei">
+      <button  v-on:click="withdraw()" >Withdraw</button>
 
  </div>
 
@@ -92,6 +95,7 @@ export default {
       contractaddress: 'address',
       proposals: [],
       events: [],
+      withdrawamount: [],
 
       pseudo: undefined
     }
@@ -239,6 +243,11 @@ export default {
     reject: function () {
       console.log('reject', this.rejectaddress)
       MultiSig.reject(this.rejectaddress)
+    },
+
+    withdraw: function () {
+      console.log('withdraw', this.withdrawamount)
+      MultiSig.withdraw(this.withdrawamount)
     }
 
   }

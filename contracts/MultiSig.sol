@@ -216,9 +216,15 @@ contract MultiSig {
         contractOwner = msg.sender;
         state = ProposalState.AcceptingContributions;
 
-        signersList[address(0x44c46Ed496B94fafE8A81b9Ab93B27935fcA1603)] = true; signerCount = signerCount.add(1);
-        signersList[address(0x53d5f815e1ffb43297cdDf1E4C94950ae464c912)] = true; signerCount = signerCount.add(1);
-        signersList[address(0xB8F1858cf5f20d74D2fCfCcA2Ca6b5C9847FC67b)] = true; signerCount = signerCount.add(1);
+
+        signersList[address(0xfa3c6a1d480a14c546f12cdbb6d1bacbf02a1610)] = true; signerCount = signerCount.add(1);
+        signersList[address(0xfa3c6a1d480a14c546f12cdbb6d1bacbf02a1610)] = true; signerCount = signerCount.add(1);
+        signersList[address(0x7c0e7b2418141f492653c6bf9ced144c338ba740)] = true; signerCount = signerCount.add(1);
+
+
+        // signersList[address(0x44c46Ed496B94fafE8A81b9Ab93B27935fcA1603)] = true; signerCount = signerCount.add(1);
+        // signersList[address(0x53d5f815e1ffb43297cdDf1E4C94950ae464c912)] = true; signerCount = signerCount.add(1);
+        // signersList[address(0xB8F1858cf5f20d74D2fCfCcA2Ca6b5C9847FC67b)] = true; signerCount = signerCount.add(1);
 
  /*
   //my test in remix to be removed

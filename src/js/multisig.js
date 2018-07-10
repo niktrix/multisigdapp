@@ -26,7 +26,7 @@ const MultiSig = {
   isSigner: function (address) {
     let self = this
     return new Promise((resolve, reject) => {
-      self.instance.isSigner.call(
+      self.instance.signersList.call(
          address
        ).then(signer => {
          resolve(signer)
@@ -52,7 +52,7 @@ const MultiSig = {
     let self = this
 
     return new Promise((resolve, reject) => {
-      self.instance.contractaddress.call().then(signers => {
+      self.instance.owner.call().then(signers => {
         resolve(signers)
       }).catch(err => {
         reject(err)
@@ -101,7 +101,7 @@ const MultiSig = {
 
     return new Promise((resolve, reject) => {
       self.instance.getContributorAmount.call(address).then(signers => {
-        resolve(signers)
+        resolve({address: address, amt: signers})
       }).catch(err => {
         reject(err)
       })

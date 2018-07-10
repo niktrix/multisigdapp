@@ -1,7 +1,7 @@
 <template>
 
   <div class="dashboard">
-    <h1>{{ msg }} Address:  {{this.contractaddress}}</h1>
+    <h1>{{ msg }} Owner:  {{this.contractaddress}}</h1>
     <div v-if="isaccepting">
       This Contract is  {{ pseudo }}.
     </div>
@@ -34,7 +34,7 @@
 
     </div>
 
- <div >
+ <div  v-if="isSigner">
          You are one of the signer
 
     <!-- <div v-if="accepting"> -->
@@ -55,8 +55,7 @@
 
 
  </div>
-    <div  >{{signers}} <router-link to="/signup">here</router-link>.</div>
-  </div>
+   </div>
 
 </template>
 
@@ -135,20 +134,29 @@ export default {
       })
     },
 
-    getContributors: function () {
+    getContributors: async function () {
       console.log('endcontribution')
       MultiSig.getContributers().then((cont) => {
-        this.contributors.push({'address': cont})
+        for (var i = 0; i <= cont.length - 1; i++) {
+          console.log('add====', cont[i])
+          MultiSig.getContributorAmount(cont[i]).then((amt) => {
+            var ad = cont[i]
+            this.contributors.push({'address': amt.address, 'contribution': amt.amt})
+            console.log('cont.Valueof()', ad)
+          })
+        }
         console.log('ended')
       })
     },
 
     getContributorAmount: function () {
-      for (var i = 0; i < this.contributors.length - 1; i++) {
+      var _this = this
+      console.log('-----', _this.contributors)
+      for (var i = 0; i < _this.contributors.length - 1; i++) {
         console.log('this.cont', this.contributors)
         MultiSig.getContributorAmount(this.contributors[i].address).then((cont) => {
           console.log('cont.Valueof()', cont.Valueof())
-          this.contributors[i].amount = 90
+          _this.contributors[i].amount = 90
           console.log('this.cont', this.contributors)
         })
       }
@@ -188,7 +196,7 @@ export default {
     },
 
     reject: function () {
-      console.log('approve', this.rejectaddress)
+      console.log('reject', this.rejectaddress)
       MultiSig.reject(this.rejectaddress)
     }
 

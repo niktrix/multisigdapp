@@ -218,7 +218,7 @@ contract MultiSig {
 
 
         signersList[address(0xfa3c6a1d480a14c546f12cdbb6d1bacbf02a1610)] = true; signerCount = signerCount.add(1);
-        signersList[address(0xfa3c6a1d480a14c546f12cdbb6d1bacbf02a1610)] = true; signerCount = signerCount.add(1);
+        signersList[address(0x2f47343208d8db38a64f49d7384ce70367fc98c0)] = true; signerCount = signerCount.add(1);
         signersList[address(0x7c0e7b2418141f492653c6bf9ced144c338ba740)] = true; signerCount = signerCount.add(1);
 
 
